@@ -19,35 +19,35 @@
     var map = new mapboxgl.Map({
         container: 'map',
         style: 'mapbox://styles/marceairene/ckcjlbn7c44va1imuifexgydl',
-        center: [-120, 50],
+        center: [-104.9397, 39.765],
         zoom: 2
     });
 
     map.on('load', function() {
         // Add a geojson point source.
         // Heatmap layers also work with a vector tile source.
-        map.addSource('earthquakes', {
+        map.addSource('salary_points', {
             'type': 'geojson',
             'data':
-                'https://docs.mapbox.com/mapbox-gl-js/assets/earthquakes.geojson'
+                'https://github.com/marceamaps/Denver-Salary-Map/blob/master/salary_points.geojson'
         });
 
             map.addLayer(
                 {
-                    'id': 'earthquakes-heat',
+                    'id': 'denver-salary',
                     'type': 'heatmap',
-                    'source': 'earthquakes',
+                    'source': 'salary_points',
                     'maxzoom': 9,
                     'paint': {
                         // Increase the heatmap weight based on frequency and property magnitude
                         'heatmap-weight': [
                             'interpolate',
                             ['linear'],
-                            ['get', 'mag'],
+                            ['get', 'salary'],
+                            50000,
                             0,
-                            0,
-                            6,
-                            1
+                            211000,
+                            5
                         ],
                         // Increase the heatmap color weight weight by zoom level
                         // heatmap-intensity is a multiplier on top of heatmap-weight
@@ -68,17 +68,17 @@
                             ['linear'],
                             ['heatmap-density'],
                             0,
-                            'rgba(33,102,172,0)',
-                            0.2,
-                            'rgb(103,169,207)',
-                            0.4,
-                            'rgb(209,229,240)',
-                            0.6,
-                            'rgb(253,219,199)',
-                            0.8,
-                            'rgb(239,138,98)',
+                            '#e0e0e5',
+                            0.1,
+                            '#b7acc8',
+                            0.3,
+                            '#dda1be',
+                            0.5,
+                            '#7b85a3',
+                            0.7,
+                            '#6f4e97',
                             1,
-                            'rgb(178,24,43)'
+                            '#ca4487'
                         ],
                         // Adjust the heatmap radius by zoom level
                         'heatmap-radius': [
@@ -90,7 +90,7 @@
                             9,
                             20
                         ],
-                        // Transition from heatmap to circle layer by zoom level
+                        // Keep opacity at 100%
                         'heatmap-opacity': [
                             'interpolate',
                             ['linear'],
@@ -98,7 +98,7 @@
                             7,
                             1,
                             9,
-                            0
+                            1
                         ]
                     }
                 },
@@ -107,7 +107,7 @@
 
         });
 
-/*         map.on('click', 'denver-heatmap', function (e) {
+/*         map.on('click', 'denver-salary', function (e) {
             new mapboxgl.Popup()
                 .setLngLat(e.features[0].geometry.coordinates) 
                 .setHTML('<b>Number of Responses:</b> '+ e.features[0].properties.dbh) 
