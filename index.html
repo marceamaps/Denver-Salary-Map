@@ -30,7 +30,8 @@
             'type': 'geojson',
             'data':
                 'https://raw.githubusercontent.com/marceamaps/Denver-Salary-Map/master/salary_points.geojson'
-        });
+            }
+        );
         // I want to add another source here
 
             map.addLayer(
@@ -96,27 +97,27 @@
                             7,
                             1,
                             9,
-                            1
+                            0
                         ]
                     }
                 },
                 'denver-city-names'
             );
 
-            /* map.addLayer(
+            map.addLayer(
             {
-                'id': 'salary-point',
+                'id': 'salary-circles',
                 'type': 'circle',
                 'source': 'salary_points',
                 'minzoom': 7,
                 'paint': {
-                    // Size circle radius by salary and zoom level
+                    // Size circle radius by salary
                     'circle-radius': [
                         'interpolate',
                         ['linear'],
                         ['zoom'],
                         7,
-                        ['interpolate', ['linear'], ['get', 'salary'], 50000, 1, 211000, 5],
+                        ['interpolate', ['linear'], ['get', 'salary'], 50000, 1, 211000, 4],
                         16,
                         ['interpolate', ['linear'], ['get', 'salary'], 50000, 5, 211000, 50]
                     ],
@@ -126,17 +127,17 @@
                         ['linear'],
                         ['get', 'salary'],
                         1,
-                        'rgba(224,224,229,0)',
+                        'rgba(33,102,172,0)',
                         2,
-                        'rgb(221,161,190)',
+                        'rgb(103,169,207)',
                         3,
                         'rgb(209,229,240)',
                         4,
-                        'rgb(123,133,163)',
+                        'rgb(253,219,199)',
                         5,
-                        'rgb(111,78,151)',
+                        'rgb(239,138,98)',
                         6,
-                        'rgb(202,68,135)'
+                        'rgb(178,24,43)'
                     ],
                     'circle-stroke-color': 'white',
                     'circle-stroke-width': 1,
@@ -153,13 +154,13 @@
                 }
             },
             'denver-city-names'
-        ); */
+        );
     }); 
 
-            map.on('click', 'denver-salary', function (e) {
+            map.on('click', 'salary-circles', function (e) {
                 new mapboxgl.Popup()
                     .setLngLat(e.features[0].geometry.coordinates) 
-                    .setHTML('<b>Number of Responses:</b> '+ e.features[0].properties.dbh) 
+                    .setHTML('<b>Salary:</b> '+ e.features[0].properties.salary) 
                     .addTo(map);
     });
 
