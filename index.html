@@ -19,8 +19,8 @@
     var map = new mapboxgl.Map({
         container: 'map',
         style: 'mapbox://styles/marceairene/ckcjlbn7c44va1imuifexgydl',
-        center: [-104.9397, 39.765],
-        zoom: 2
+        center: [-104.9624, 40.034],
+        zoom: 8
     });
 
     map.on('load', function() {
@@ -29,8 +29,9 @@
         map.addSource('salary_points', {
             'type': 'geojson',
             'data':
-                'https://github.com/marceamaps/Denver-Salary-Map/blob/master/salary_points.geojson'
+                'https://raw.githubusercontent.com/marceamaps/Denver-Salary-Map/master/salary_points.geojson'
         });
+        // I want to add another source here
 
             map.addLayer(
                 {
@@ -39,7 +40,7 @@
                     'source': 'salary_points',
                     'maxzoom': 9,
                     'paint': {
-                        // Increase the heatmap weight based on frequency and property magnitude
+                        // Increase the heatmap weight based on salary min and max values
                         'heatmap-weight': [
                             'interpolate',
                             ['linear'],
@@ -50,7 +51,6 @@
                             5
                         ],
                         // Increase the heatmap color weight weight by zoom level
-                        // heatmap-intensity is a multiplier on top of heatmap-weight
                         'heatmap-intensity': [
                             'interpolate',
                             ['linear'],
@@ -60,25 +60,23 @@
                             9,
                             3
                         ],
-                        // Color ramp for heatmap.  Domain is 0 (low) to 1 (high).
-                        // Begin color ramp at 0-stop with a 0-transparancy color
-                        // to create a blur-like effect.
+                        // Color ramp for heatmap
                         'heatmap-color': [
                             'interpolate',
                             ['linear'],
                             ['heatmap-density'],
                             0,
-                            '#e0e0e5',
-                            0.1,
-                            '#b7acc8',
-                            0.3,
-                            '#dda1be',
-                            0.5,
-                            '#7b85a3',
-                            0.7,
-                            '#6f4e97',
+                            'rgba(224,224,229,0)',
+                            0.2,
+                            'rgb(221,161,190)',
+                            0.4,
+                            'rgb(209,229,240)',
+                            0.6,
+                            'rgb(123,133,163)',
+                            0.8,
+                            'rgb(111,78,151)',
                             1,
-                            '#ca4487'
+                            'rgb(202,68,135)'
                         ],
                         // Adjust the heatmap radius by zoom level
                         'heatmap-radius': [
@@ -90,7 +88,7 @@
                             9,
                             20
                         ],
-                        // Keep opacity at 100%
+                        // This is the opacity
                         'heatmap-opacity': [
                             'interpolate',
                             ['linear'],
@@ -102,17 +100,68 @@
                         ]
                     }
                 },
-                'zipcode-bounds-line'
+                'denver-city-names'
             );
 
-        });
+            /* map.addLayer(
+            {
+                'id': 'salary-point',
+                'type': 'circle',
+                'source': 'salary_points',
+                'minzoom': 7,
+                'paint': {
+                    // Size circle radius by salary and zoom level
+                    'circle-radius': [
+                        'interpolate',
+                        ['linear'],
+                        ['zoom'],
+                        7,
+                        ['interpolate', ['linear'], ['get', 'salary'], 50000, 1, 211000, 5],
+                        16,
+                        ['interpolate', ['linear'], ['get', 'salary'], 50000, 5, 211000, 50]
+                    ],
+                    // Color circle by salary
+                    'circle-color': [
+                        'interpolate',
+                        ['linear'],
+                        ['get', 'salary'],
+                        1,
+                        'rgba(224,224,229,0)',
+                        2,
+                        'rgb(221,161,190)',
+                        3,
+                        'rgb(209,229,240)',
+                        4,
+                        'rgb(123,133,163)',
+                        5,
+                        'rgb(111,78,151)',
+                        6,
+                        'rgb(202,68,135)'
+                    ],
+                    'circle-stroke-color': 'white',
+                    'circle-stroke-width': 1,
+                    // Transition from heatmap to circle layer by zoom level
+                    'circle-opacity': [
+                        'interpolate',
+                        ['linear'],
+                        ['zoom'],
+                        7,
+                        0,
+                        8,
+                        1
+                    ]
+                }
+            },
+            'denver-city-names'
+        ); */
+    }); 
 
-/*         map.on('click', 'denver-salary', function (e) {
-            new mapboxgl.Popup()
-                .setLngLat(e.features[0].geometry.coordinates) 
-                .setHTML('<b>Number of Responses:</b> '+ e.features[0].properties.dbh) 
-                .addTo(map);
-    }); */
+            map.on('click', 'denver-salary', function (e) {
+                new mapboxgl.Popup()
+                    .setLngLat(e.features[0].geometry.coordinates) 
+                    .setHTML('<b>Number of Responses:</b> '+ e.features[0].properties.dbh) 
+                    .addTo(map);
+    });
 
 
 </script>
